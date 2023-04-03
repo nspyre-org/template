@@ -1,2 +1,2 @@
-# template
-A template for an experiment using nspyre.
+# nspyre Template
+An [nspyre](https://nspyre.readthedocs.io/en/latest/) experiment template.
