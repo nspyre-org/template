@@ -55,12 +55,15 @@ class FlexLinePlotWidgetWithODMRDefaults(FlexLinePlotWidget):
     """This is meant to give the user some hints as to how to use the FlexSinkLinePlotWidget."""
     def __init__(self):
         super().__init__()
-        self.add_plot('avg',        series='series1',   scan_i='',     scan_j='',  processing='Average')
-        self.add_plot('latest',     series='series1',   scan_i='-1',   scan_j='',  processing='Average')
-        self.add_plot('first',      series='series1',   scan_i='0',    scan_j='1', processing='Average')
-        self.add_plot('latest_10',  series='series1',   scan_i='-10',  scan_j='',  processing='Average')
-        self.hide_plot('first')
-        self.hide_plot('latest_10')
+        self.add_plot('sig_avg',        series='signal',   scan_i='',     scan_j='',  processing='Average')
+        self.add_plot('sig_latest',     series='signal',   scan_i='-1',   scan_j='',  processing='Average')
+        self.add_plot('sig_first',      series='signal',   scan_i='0',    scan_j='1', processing='Average')
+        self.add_plot('sig_latest_10',  series='signal',   scan_i='-10',  scan_j='',  processing='Average')
+        self.hide_plot('sig_first')
+        self.hide_plot('sig_latest_10')
+
+        self.add_plot('bg_avg',        series='background',   scan_i='',     scan_j='',  processing='Average')
+        self.add_plot('bg_latest',     series='background',   scan_i='-1',   scan_j='',  processing='Average')
         self.line_plot.plot_item().setXRange(3.0, 4.0)
         self.line_plot.plot_item().setYRange(-100, 4500)
         self.datasource_lineedit.setText('odmr')

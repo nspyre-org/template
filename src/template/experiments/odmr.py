@@ -37,29 +37,39 @@ class SpinMeasurements:
 
             # for storing the experiment data
             # list of numpy arrays of shape (2, num_points)
-            sweep_list = StreamingList([])
+            signal_sweeps = StreamingList([])
+            background_sweeps = StreamingList([])
             for i in range(iterations):
                 # photon counts corresponding to each frequency
                 # initialize to NaN
-                counts = np.empty(num_points)
-                counts[:] = np.nan
-                sweep_list.append(np.stack([frequencies/1e9, counts]))
+                sig_counts = np.empty(num_points)
+                sig_counts[:] = np.nan
+                signal_sweeps.append(np.stack([frequencies/1e9, sig_counts]))
+                bg_counts = np.empty(num_points)
+                bg_counts[:] = np.nan
+                background_sweeps.append(np.stack([frequencies/1e9, bg_counts]))
 
                 # sweep counts vs. frequency.
                 for f, freq in enumerate(frequencies):
                     # access the signal generator driver on the instrument server and set its frequency.
                     gw.drv.set_frequency(freq)
                     # read the number of photon counts received by the photon counter.
-                    sweep_list[-1][1][f] = gw.drv.cnts(0.02)
+                    signal_sweeps[-1][1][f] = gw.drv.cnts(0.01)
                     # notify the streaminglist that this entry has updated so it will be pushed to the data server
-                    sweep_list.updated_item(len(sweep_list)-1)
+                    signal_sweeps.updated_item(-1)
+
+                    # set the signal generator off-resonance to mimic a background noise signal
+                    gw.drv.set_frequency(100e3)
+                    background_sweeps[-1][1][f] = gw.drv.cnts(0.01)
+                    background_sweeps.updated_item(-1)
 
                     # save the current data to the data server.
                     odmr_data.push({'params': {'start': start_freq, 'stop': stop_freq, 'num_points': num_points, 'iterations': iterations},
                                     'title': 'Optically Detected Magnetic Resonance',
                                     'xlabel': 'Frequency (GHz)',
                                     'ylabel': 'Counts',
-                                    'datasets': {'series1' : sweep_list}
+                                    'datasets': {'signal' : signal_sweeps,
+                                                'background': background_sweeps}
                     })
                     if experiment_widget_process_queue(msg_queue) == 'stop':
                         # the GUI has asked us nicely to exit
