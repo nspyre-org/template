@@ -55,6 +55,7 @@ class FlexLinePlotWidgetWithODMRDefaults(FlexLinePlotWidget):
     """This is meant to give the user some hints as to how to use the FlexSinkLinePlotWidget."""
     def __init__(self):
         super().__init__()
+        # generate some default signal plots
         self.add_plot('sig_avg',        series='signal',   scan_i='',     scan_j='',  processing='Average')
         self.add_plot('sig_latest',     series='signal',   scan_i='-1',   scan_j='',  processing='Average')
         self.add_plot('sig_first',      series='signal',   scan_i='0',    scan_j='1', processing='Average')
@@ -62,8 +63,17 @@ class FlexLinePlotWidgetWithODMRDefaults(FlexLinePlotWidget):
         self.hide_plot('sig_first')
         self.hide_plot('sig_latest_10')
 
+        # generate some default background plots
         self.add_plot('bg_avg',        series='background',   scan_i='',     scan_j='',  processing='Average')
         self.add_plot('bg_latest',     series='background',   scan_i='-1',   scan_j='',  processing='Average')
+
+        # manually set the XY range
         self.line_plot.plot_item().setXRange(3.0, 4.0)
         self.line_plot.plot_item().setYRange(-100, 4500)
+
+        # retrieve legend object
+        legend = self.line_plot.plot_widget.addLegend()
+        # set the legend location
+        legend.setOffset((-10, -50))
+
         self.datasource_lineedit.setText('odmr')
