@@ -10,6 +10,7 @@ from pathlib import Path
 # function does not recursively reload modules
 import template.gui.elements
 
+from nspyre.misc.stacktracer import trace_start, trace_stop
 import nspyre.gui.widgets.save
 import nspyre.gui.widgets.load
 import nspyre.gui.widgets.flex_line_plot
@@ -55,8 +56,12 @@ def main():
         }
     )
     main_widget.show()
+
+    # TODO
+    trace_start('trace.html', interval=5)
     # Run the GUI event loop.
     app.exec()
+    trace_stop()
 
 
 # if using the nspyre ProcessRunner, the main code must be guarded with if __name__ == '__main__':
