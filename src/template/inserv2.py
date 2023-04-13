@@ -10,20 +10,13 @@ HERE = Path(__file__).parent
 
 start_instrument_server(drivers=[
     {
-        'name': 'drv',
-        'class_path': HERE / 'drivers' / 'driver.py',
-        'class_name': 'FakeODMRInstrument',
-        'args': [],
-        'kwargs': {}
-    },
-    {
-        'name': 'drv2',
+        'name': 'drv3',
         'class_path': HERE / 'drivers' / 'driver.py',
         'class_name': 'FakeODMRInstrument',
         'args': [],
         'kwargs': {}
     }],
     inserv_kwargs={
-        'port': 42068
+        'port': 42067
     }
 )

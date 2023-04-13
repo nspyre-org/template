@@ -5,9 +5,10 @@ import time
 
 import numpy as np
 from nspyre import DataSource
-from nspyre import InstrumentGateway
 from nspyre import experiment_widget_process_queue
 from nspyre import StreamingList
+
+from template.drivers.insmgr import MyInstrumentManager
 
 class SpinMeasurements:
     """Perform spin measurements."""
@@ -27,10 +28,10 @@ class SpinMeasurements:
         # connect to the instrument server
         # connect to the data server and create a data set, or connect to an
         # existing one with the same name if it was created earlier.
-        with InstrumentGateway() as gw, DataSource(dataset) as odmr_data:
+        with MyInstrumentManager() as mgr, DataSource(dataset) as odmr_data:
             # set the signal generator amplitude for the scan (dBm).
-            gw.drv.set_amplitude(6.5)
-            gw.drv.set_output_en(True)
+            mgr.drv.set_amplitude(6.5)
+            mgr.drv.set_output_en(True)
 
             # frequencies that will be swept over in the ODMR measurement
             frequencies = np.linspace(start_freq, stop_freq, num_points)
@@ -52,15 +53,15 @@ class SpinMeasurements:
                 # sweep counts vs. frequency.
                 for f, freq in enumerate(frequencies):
                     # access the signal generator driver on the instrument server and set its frequency.
-                    gw.drv.set_frequency(freq)
+                    mgr.drv.set_frequency(freq)
                     # read the number of photon counts received by the photon counter.
-                    signal_sweeps[-1][1][f] = gw.drv.cnts(0.01)
+                    signal_sweeps[-1][1][f] = mgr.drv.cnts(0.01)
                     # notify the streaminglist that this entry has updated so it will be pushed to the data server
                     signal_sweeps.updated_item(-1)
 
                     # set the signal generator off-resonance to mimic a background noise signal
-                    gw.drv.set_frequency(100e3)
-                    background_sweeps[-1][1][f] = gw.drv.cnts(0.01)
+                    mgr.drv.set_frequency(100e3)
+                    background_sweeps[-1][1][f] = mgr.drv.cnts(0.01)
                     background_sweeps.updated_item(-1)
 
                     # save the current data to the data server.
