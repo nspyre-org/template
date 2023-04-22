@@ -55,13 +55,13 @@ class SpinMeasurements:
                     # access the signal generator driver on the instrument server and set its frequency.
                     mgr.drv.set_frequency(freq)
                     # read the number of photon counts received by the photon counter.
-                    signal_sweeps[-1][1][f] = mgr.drv.cnts(0.01)
+                    signal_sweeps[-1][1][f] = mgr.drv.cnts(0.005)
                     # notify the streaminglist that this entry has updated so it will be pushed to the data server
                     signal_sweeps.updated_item(-1)
 
                     # set the signal generator off-resonance to mimic a background noise signal
                     mgr.drv.set_frequency(100e3)
-                    background_sweeps[-1][1][f] = mgr.drv.cnts(0.01)
+                    background_sweeps[-1][1][f] = mgr.drv.cnts(0.005)
                     background_sweeps.updated_item(-1)
 
                     # save the current data to the data server.
