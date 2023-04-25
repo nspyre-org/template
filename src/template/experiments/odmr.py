@@ -38,8 +38,8 @@ class SpinMeasurements:
 
             # for storing the experiment data
             # list of numpy arrays of shape (2, num_points)
-            signal_sweeps = StreamingList([])
-            background_sweeps = StreamingList([])
+            signal_sweeps = StreamingList()
+            background_sweeps = StreamingList()
             for i in range(iterations):
                 # photon counts corresponding to each frequency
                 # initialize to NaN
