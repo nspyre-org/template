@@ -29,9 +29,10 @@ class SpinMeasurements:
         # connect to the data server and create a data set, or connect to an
         # existing one with the same name if it was created earlier.
         with MyInstrumentManager() as mgr, DataSource(dataset) as odmr_data:
+            odmr_driver = mgr.odmr_driver
             # set the signal generator amplitude for the scan (dBm).
-            mgr.drv.set_amplitude(6.5)
-            mgr.drv.set_output_en(True)
+            odmr_driver.set_amplitude(6.5)
+            odmr_driver.set_output_en(True)
 
             # frequencies that will be swept over in the ODMR measurement
             frequencies = np.linspace(start_freq, stop_freq, num_points)
@@ -53,15 +54,15 @@ class SpinMeasurements:
                 # sweep counts vs. frequency.
                 for f, freq in enumerate(frequencies):
                     # access the signal generator driver on the instrument server and set its frequency.
-                    mgr.drv.set_frequency(freq)
+                    odmr_driver.set_frequency(freq)
                     # read the number of photon counts received by the photon counter.
-                    signal_sweeps[-1][1][f] = mgr.drv.cnts(0.005)
+                    signal_sweeps[-1][1][f] = odmr_driver.cnts(0.005)
                     # notify the streaminglist that this entry has updated so it will be pushed to the data server
                     signal_sweeps.updated_item(-1)
 
                     # set the signal generator off-resonance to mimic a background noise signal
-                    mgr.drv.set_frequency(100e3)
-                    background_sweeps[-1][1][f] = mgr.drv.cnts(0.005)
+                    odmr_driver.set_frequency(100e3)
+                    background_sweeps[-1][1][f] = odmr_driver.cnts(0.005)
                     background_sweeps.updated_item(-1)
 
                     # save the current data to the data server.

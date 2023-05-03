@@ -2,7 +2,7 @@
 import logging
 from pathlib import Path
 
-from nspyre import Subsystem
+from nspyre.extras import Subsystem
 
 _HERE = Path(__file__).parent
 _logger = logging.getLogger(__name__)
@@ -23,7 +23,8 @@ class SubsystemsDriver:
             default_boot_inserv=remote_inserv,
             default_boot_add_args=['ps',
                                     _HERE / 'fake_ps_driver.py',
-                                    'FakePSDriver']
+                                    'FakePSDriver'],
+            default_boot_timeout=1
         )
         self.subsystems.append(ps_sub)
 
@@ -33,6 +34,7 @@ class SubsystemsDriver:
             default_boot_add_args=['io',
                                     _HERE / 'fake_io_driver.py',
                                     'FakeIODriver'],
+            default_boot_timeout=1,
             dependencies=[ps_sub]
         )
         self.subsystems.append(io_sub)

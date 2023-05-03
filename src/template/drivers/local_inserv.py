@@ -24,8 +24,8 @@ nspyre_init_logger(
 )
 
 with InstrumentServer() as local_inserv, InstrumentGateway(port=42067) as remote_gw:
-    local_inserv.add('subs', _HERE / 'subsystems_driver.py', 'SubsystemsDriver', args=[local_inserv, remote_gw], local=True)
-
+    local_inserv.add('subs', _HERE / 'subsystems_driver.py', 'SubsystemsDriver', args=[local_inserv, remote_gw], local_args=True)
+    local_inserv.add('odmr_driver', _HERE / 'fake_odmr_driver.py', 'FakeODMRInstrument')
     # run a CLI (command-line interface) that allows the user to enter
     # commands to control the server
     serve_instrument_server_cli(local_inserv)
