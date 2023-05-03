@@ -1,21 +1,14 @@
-"""
-Fake data acquisition system driver for demonstration purposes.
-
-Author: Jacob Feder
-Date: 12/27/2021
-"""
 import logging
 import numpy as np
 import time
 import math
 from rpyc.utils.classic import obtain
 
-
 logger = logging.getLogger(__name__)
 
 
 class FakeODMRInstrument:
-    """Simulate a data acquisition device and produce some fake data."""
+    """Simulate a signal generator and data acquisition device to produce some fake data."""
     def __init__(self, fwhm=100e6, f_res=3.5e9, cps=4000, contrast=0.7):
         self._output_en = False
         self._amplitude = 0.0
