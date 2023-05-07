@@ -5,11 +5,6 @@ This is an example script that demonstrates the basic functionality of nspyre.
 import logging
 from pathlib import Path
 
-# in order for dynamic reloading of code to work, you must pass the specifc
-# module containing your class to MainWidgetItem, since the python reload()
-# function does not recursively reload modules
-import template.gui.elements
-
 import nspyre.gui.widgets.save
 import nspyre.gui.widgets.load
 import nspyre.gui.widgets.flex_line_plot
@@ -19,16 +14,19 @@ from nspyre import MainWidgetItem
 from nspyre import nspyre_init_logger
 from nspyre import nspyreApp
 
+# in order for dynamic reloading of code to work, you must pass the specifc
+# module containing your class to MainWidgetItem, since the python reload()
+# function does not recursively reload modules
+import template.gui.elements
 from template.drivers.insmgr import MyInstrumentManager
 
-HERE = Path(__file__).parent
-
+_HERE = Path(__file__).parent
 
 def main():
     # Log to the console as well as a file inside the logs folder.
     nspyre_init_logger(
         log_level=logging.INFO,
-        log_path=HERE / 'logs',
+        log_path=_HERE / '../logs',
         log_path_level=logging.DEBUG,
         prefix=Path(__file__).stem,
         file_size=10_000_000,

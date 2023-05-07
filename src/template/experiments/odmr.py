@@ -2,19 +2,62 @@
 This is example script demonstrates most of the basic functionality of nspyre.
 """
 import time
+import logging
+from pathlib import Path
 
 import numpy as np
 from nspyre import DataSource
 from nspyre import experiment_widget_process_queue
 from nspyre import StreamingList
+from nspyre import nspyre_init_logger
 
 from template.drivers.insmgr import MyInstrumentManager
 
-class SpinMeasurements:
-    """Perform spin measurements."""
+_HERE = Path(__file__).parent
+_logger = logging.getLogger(__name__)
 
-    def odmr_sweep(self, dataset: str, start_freq: float, stop_freq: float, num_points: int, iterations: int, msg_queue=None):
-        """Run a fake ODMR (optically detected magnetic resonance) PL (photoluminescence) sweep over a set of microwave frequencies.
+class SpinMeasurements:
+    """Spin measurement experiments."""
+
+    def __init__(self, queue_to_exp=None, queue_from_exp=None):
+        """
+        Args:
+            queue_to_exp: A multiprocessing Queue object used to send messages
+                to the experiment from the GUI.
+            queue_from_exp: A multiprocessing Queue object used to send messages
+                to the GUI from the experiment.
+        """
+        self.queue_to_exp = queue_to_exp
+        self.queue_from_exp = queue_from_exp
+
+    def __enter__(self):
+        """Perform experiment setup."""
+        # config logging messages
+        # if running a method from the GUI, it will be run in a new process
+        # this logging call is necessary in order to separate log messages
+        # originating in the GUI from those in the new experiment subprocess
+        nspyre_init_logger(
+            log_level=logging.INFO,
+            log_path=_HERE / '../logs',
+            log_path_level=logging.DEBUG,
+            prefix=Path(__file__).stem,
+            file_size=10_000_000,
+        )
+        _logger.info('Created SpinMeasurements instance.')
+
+    def __exit__(self):
+        """Perform experiment teardown."""
+        _logger.info('Destroyed SpinMeasurements instance.')
+
+    def odmr_sweep(self,
+        dataset: str,
+        start_freq: float,
+        stop_freq: float,
+        num_points: int,
+        iterations: int
+    ):
+        """Run a fake ODMR (optically detected magnetic resonance)
+        PL (photoluminescence) sweep over a set of microwave frequencies.
 
         Args:
             dataset: name of the dataset to push data to
@@ -22,9 +65,7 @@ class SpinMeasurements:
             stop_freq (float): stop frequency
             num_points (int): number of points between start-stop (inclusive)
             iterations: number of times to repeat the experiment
-            msg_queue: an optional multiprocessing message Queue object used for interprocess communication
         """
-
         # connect to the instrument server
         # connect to the data server and create a data set, or connect to an
         # existing one with the same name if it was created earlier.
@@ -73,7 +114,7 @@ class SpinMeasurements:
                                     'datasets': {'signal' : signal_sweeps,
                                                 'background': background_sweeps}
                     })
-                    if experiment_widget_process_queue(msg_queue) == 'stop':
+                    if experiment_widget_process_queue(self.queue_to_exp) == 'stop':
                         # the GUI has asked us nicely to exit
                         return
 
