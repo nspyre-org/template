@@ -13,4 +13,5 @@ Run the nspyre data server:
 
 Finally, start the experiment GUI:
 `python src/template/gui/app.py`
-
+or
+`template`

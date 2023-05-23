@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "nspyre-template"
 version = "1.0"
@@ -16,6 +20,5 @@ python = "^3.10"
 numpy = "^1.23"
 nspyre = "^0.6"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.scripts]
+template = 'template.gui.app:main'
