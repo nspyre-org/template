@@ -5,6 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "nspyre-template"
 version = "1.0"
+license = "MIT"
 description = "An nspyre experiment template."
 authors = [
 	"Jacob Feder <jacobsfeder@gmail.com>",
@@ -13,6 +14,7 @@ maintainers = [
 	"Jacob Feder <jacobsfeder@gmail.com>"
 ]
 readme = "README.md"
+repository = "https://github.com/nspyre-org/template"
 packages = [{include = "template", from = "src"}]
 
 [tool.poetry.dependencies]
