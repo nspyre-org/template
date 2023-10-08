@@ -45,7 +45,7 @@ class SpinMeasurements:
         )
         _logger.info('Created SpinMeasurements instance.')
 
-    def __exit__(self):
+    def __exit__(self, *args):
         """Perform experiment teardown."""
         _logger.info('Destroyed SpinMeasurements instance.')
 
@@ -111,7 +111,7 @@ class SpinMeasurements:
                                     'title': 'Optically Detected Magnetic Resonance',
                                     'xlabel': 'Frequency (GHz)',
                                     'ylabel': 'Counts',
-                                    'datasets': {'signal' : signal_sweeps,
+                                    'data_series': {'signal' : signal_sweeps,
                                                 'background': background_sweeps}
                     })
                     if experiment_widget_process_queue(self.queue_to_exp) == 'stop':

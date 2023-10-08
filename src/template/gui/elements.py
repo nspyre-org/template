@@ -57,12 +57,12 @@ class ODMRWidget(ExperimentWidget):
 def process_ODMR_data(sink: DataSink):
     """Subtract the signal from background trace and add it as a new 'diff' dataset."""
     diff_sweeps = []
-    for s,_ in enumerate(sink.datasets['signal']):
-        freqs = sink.datasets['signal'][s][0]
-        sig = sink.datasets['signal'][s][1]
-        bg = sink.datasets['background'][s][1]
+    for s,_ in enumerate(sink.data_series['signal']):
+        freqs = sink.data_series['signal'][s][0]
+        sig = sink.data_series['signal'][s][1]
+        bg = sink.data_series['background'][s][1]
         diff_sweeps.append(np.stack([freqs, sig - bg]))
-    sink.datasets['diff'] = diff_sweeps
+    sink.data_series['diff'] = diff_sweeps
 
 class FlexLinePlotWidgetWithODMRDefaults(FlexLinePlotWidget):
     """Add some default settings to the FlexSinkLinePlotWidget."""
