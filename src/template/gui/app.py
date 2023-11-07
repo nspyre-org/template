@@ -5,8 +5,7 @@ This is an example script that demonstrates the basic functionality of nspyre.
 import logging
 from pathlib import Path
 
-import nspyre.gui.widgets.save
-import nspyre.gui.widgets.load
+import nspyre.gui.widgets.save_load
 import nspyre.gui.widgets.flex_line_plot
 import nspyre.gui.widgets.subsystem
 from nspyre import MainWidget
@@ -53,8 +52,7 @@ def main():
                         stretch=(100, 100),
                     ),
                 },
-                'Save': MainWidgetItem(nspyre.gui.widgets.save, 'SaveWidget', stretch=(1, 1)),
-                'Load': MainWidgetItem(nspyre.gui.widgets.load, 'LoadWidget', stretch=(1, 1)),
+                'SaveLoad': MainWidgetItem(nspyre.gui.widgets.save_load, 'SaveLoadWidget', stretch=(1, 1)),
             }
         )
         main_widget.show()
